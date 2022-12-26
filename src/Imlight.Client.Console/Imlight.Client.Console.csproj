@@ -12,7 +12,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Imlight.Core.Network\Imlight.Core.Network.csproj" />
       <ProjectReference Include="..\Imlight.Core.Services\Imlight.Core.Services.csproj" />
     </ItemGroup>
 

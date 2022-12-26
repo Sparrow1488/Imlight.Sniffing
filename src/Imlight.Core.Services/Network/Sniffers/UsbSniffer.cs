@@ -14,7 +14,7 @@ public sealed class UsbSniffer : IUsbSniffer
     public UsbSniffer()
     {
         var pcapInterface = USBPcapClient.find_usbpcap_filters().First();
-        _client = new USBPcapClient(pcapInterface, 2);
+        _client = new USBPcapClient(pcapInterface, 2); // TODO: add check for admin mode is enabled
     }
     
     public UsbSnifferEvents? Events { get; set; }

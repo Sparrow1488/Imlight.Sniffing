@@ -1,6 +1,5 @@
 ﻿using Imlight.Core.Services.Constants;
 using Imlight.Core.Services.Network.Packets;
-using Microsoft.Extensions.Logging;
 
 namespace Imlight.Core.Services.Parsers;
 
