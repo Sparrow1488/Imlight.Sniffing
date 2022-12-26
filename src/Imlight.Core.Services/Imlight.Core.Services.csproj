@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.2-mauipre.1.22102.15" />
+      <PackageReference Include="USBPcapLib" Version="1.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Network" />
+    </ItemGroup>
+
+</Project>
