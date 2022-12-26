@@ -3,7 +3,7 @@ using Imlight.Core.Services.Network.Packets;
 
 namespace Imlight.Core.Services.Parsers;
 
-public interface IUsbPacketActionParser
+public interface IUsbPacketParser
 {
-    PacketAction GetFromPacket(UsbPacket packet);
+    DeviceAction GetAction(UsbPacket packet);
 }

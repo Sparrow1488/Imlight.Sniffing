@@ -2,7 +2,9 @@
 using Imlight.Core.Services.Network.Events;
 using Imlight.Core.Services.Network.Packets;
 using Imlight.Core.Services.Network.Sniffers.Abstractions;
+using Imlight.Core.Services.Network.Sniffers.Options;
 using Imlight.Core.Services.Utility;
+using Microsoft.Extensions.Options;
 using USBPcapLib;
 
 namespace Imlight.Core.Services.Network.Sniffers;
@@ -13,15 +15,14 @@ public sealed class UsbSniffer : IUsbSniffer
 {
     private readonly USBPcapClient _client;
 
-    public UsbSniffer()
+    public UsbSniffer(IOptions<UsbSnifferConfig> options)
     {
         if (!WindowsHelper.IsAdministrator())
         {
             throw new ForbiddenException("You must run this process as Administrator");
         }
         
-        var pcapInterface = USBPcapClient.find_usbpcap_filters().First();
-        _client = new USBPcapClient(pcapInterface, 2); // TODO: add check for admin mode is enabled
+        _client = new USBPcapClient(options.Value.Filter, options.Value.DeviceIdFilter);
     }
     
     public UsbSnifferEvents? Events { get; set; }

@@ -6,21 +6,21 @@ namespace Imlight.Core.Services.Handlers;
 
 public class SharedPacketHandler : PacketHandler
 {
-    private readonly IUsbPacketActionParser _actionParser;
+    private readonly IUsbPacketParser _parser;
 
     public SharedPacketHandler(
         ILogger<PacketHandler> logger,
-        IUsbPacketActionParser actionParser) 
+        IUsbPacketParser parser) 
     : base(logger)
     {
-        _actionParser = actionParser;
+        _parser = parser;
     }
 
     public override void Handle(Packet packet)
     {
         if (packet is not UsbPacket usbPacket) return;
         
-        var action = _actionParser.GetFromPacket(usbPacket);
+        var action = _parser.GetAction(usbPacket);
         Logger.LogInformation("Device action is '{action}'", action);
     }
 }

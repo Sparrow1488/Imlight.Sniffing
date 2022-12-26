@@ -3,19 +3,19 @@ using Imlight.Core.Services.Network.Packets;
 
 namespace Imlight.Core.Services.Parsers;
 
-public class BluetoothMouseActionParser : IUsbPacketActionParser
+public class BluetoothMouseParser : IUsbPacketParser
 {
     private static readonly byte[] StartsClickCompareData = { 0x01, 0x06, 0x01, 0x00 };
     private static readonly byte[] StartsMoveCompareData = { 0x01, 0x07, 0x01 };
 
-    public PacketAction GetFromPacket(UsbPacket packet)
+    public DeviceAction GetAction(UsbPacket packet)
     {
         if (StartsMoveCompareData.SequenceEqual(packet.Data.Take(StartsMoveCompareData.Length))) {
-            return PacketAction.Move;
+            return DeviceAction.Move;
         }
         if (StartsClickCompareData.SequenceEqual(packet.Data.Take(StartsClickCompareData.Length))) {
-            return PacketAction.Click;
+            return DeviceAction.Click;
         }
-        return PacketAction.Undefined;
+        return DeviceAction.Undefined;
     }
 }

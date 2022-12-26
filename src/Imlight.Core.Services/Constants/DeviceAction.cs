@@ -1,6 +1,6 @@
 ﻿namespace Imlight.Core.Services.Constants;
 
-public enum PacketAction : byte
+public enum DeviceAction : byte
 {
     Undefined = 0x0,
     Click = 0x01,
