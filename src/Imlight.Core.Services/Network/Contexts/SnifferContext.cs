@@ -14,7 +14,10 @@ public sealed class SnifferContext : INotifyPropertyChanged
         get => _packet;
         set
         {
-            OnPropertyChanged(nameof(Packet));
+            if (value is not null)
+            {
+                OnPropertyChanged(nameof(Packet));
+            }
             _packet = value;
         }
     }

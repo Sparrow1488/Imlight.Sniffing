@@ -2,7 +2,7 @@
 
 namespace Imlight.Client.Desktop.Models;
 
-public class UsbPcapDeviceId : INotifyPropertyChanged
+public sealed class UsbPcapDeviceId : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
     private bool _isSelected;
@@ -18,7 +18,7 @@ public class UsbPcapDeviceId : INotifyPropertyChanged
         }
     }
 
-    protected virtual void OnPropertyChanged(string? propertyName = null) =>
+    private void OnPropertyChanged(string? propertyName = null) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
     public override string ToString() => Value.ToString();

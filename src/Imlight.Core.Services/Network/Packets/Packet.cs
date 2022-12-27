@@ -7,7 +7,8 @@ public abstract class Packet
         Sender = sender;
         Data = data;
     }
-    
+
+    public int Id { get; internal set; }
     public object Sender { get; }
     public byte[] Data { get; }
 }

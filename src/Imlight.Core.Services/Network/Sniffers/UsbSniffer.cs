@@ -18,6 +18,7 @@ public sealed class UsbSniffer : IUsbSniffer
     private bool _isStarted;
     private USBPcapClient? _client;
     private CancellationTokenSource? _captureTaskSource;
+    private int _currentPacketId = 0;
 
     public UsbSniffer(IOptions<UsbSnifferConfig> options)
     {
@@ -40,7 +41,10 @@ public sealed class UsbSniffer : IUsbSniffer
         {
             if (eventArgs is null) return;
             
-            var packet = new UsbPacket(sender ?? new object(), eventArgs.Data);
+            var packet = new UsbPacket(sender ?? new object(), eventArgs.Data)
+            {
+                Id = _currentPacketId++
+            };
             Events?.OnReadPacket(packet);
         };
 

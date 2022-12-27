@@ -55,19 +55,19 @@
                                      MaxHeight="200" 
                                      VerticalScrollBarVisibility="Visible" 
                                      IsReadOnly="True"/>
-                            
-                            <!-- <StackPanel Grid.Row="1" Grid.Column="0"> -->
-                            <!--     <Button Margin="0 5" Command="{Binding ApplySettingsCommand}"> -->
-                            <!--         <TextBlock Text="Apply" FontFamily="Times New Roman"/> -->
-                            <!--     </Button> -->
-                            <!-- </StackPanel> -->
                         </Grid>
                     </GroupBox.Content>
                 </GroupBox>
             </StackPanel>
             
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MaxHeight="350">
-                <TextBox MaxHeight="250" IsReadOnly="True" Text="{Binding ReadPacketMessage}"/>
+            <StackPanel Margin="5" VerticalAlignment="Center">
+                <ListBox ForceCursor="True" MaxHeight="150" ItemsSource="{Binding Packets}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Message}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             
                 <WrapPanel>
                     <Button Content="Start" Width="60" Height="20" Command="{Binding StartSniffingCommand}"></Button>

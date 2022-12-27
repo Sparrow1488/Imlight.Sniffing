@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using Imlight.Client.Desktop.Commands;
 using Imlight.Client.Desktop.Models;
+using Imlight.Core.Services.Constants;
 using Imlight.Core.Services.Network.Contexts;
+using Imlight.Core.Services.Network.Packets;
 using Imlight.Core.Services.Network.Sniffers.Options;
 using Imlight.Core.Services.Utility;
 using Microsoft.Extensions.Options;
@@ -15,13 +19,12 @@ namespace Imlight.Client.Desktop.ViewModels;
 
 public class SnifferViewModel : ViewModelsBase
 {
-    private string? _readPacketMessage;
     private string? _interactivity;
     
     public SnifferViewModel(
-        StartSniffingCommand startSniffingCommand,
-        StopSniffingCommand stopSniffingCommand,
         SnifferContext context,
+        StopSniffingCommand stopSniffingCommand,
+        StartSniffingCommand startSniffingCommand,
         IOptions<UsbSnifferConfig> snifferOptions)
     {
         #region Commands initialization
@@ -33,13 +36,14 @@ public class SnifferViewModel : ViewModelsBase
         
         #region Interactivity initialization
 
-        Interactivity = USBPcapClient.enumerate_print_usbpcap_interactive(snifferOptions.Value.Filter);
         Filters = new ObservableCollection<UsbPcapFilter>();
         foreach (var filter in USBPcapClient.find_usbpcap_filters()) {
             Filters.Add(new UsbPcapFilter {
                 Name = filter
             });
         }
+
+        Interactivity = string.Join("\n", Filters.Select(x => USBPcapClient.enumerate_print_usbpcap_interactive(x.Name)));
 
         #endregion
 
@@ -76,11 +80,36 @@ public class SnifferViewModel : ViewModelsBase
 
         #endregion
 
+        #region Packets initialization
+
+        Packets = new ObservableCollection<UsbPacketModel>();
+        PacketsBuffer = new List<UsbPacketModel>();
+
+        #endregion
+        
         #region Sniffer context initialization
 
         context.PropertyChanged += (_, args) => {
             if (args.PropertyName == nameof(context.Packet))
-                ReadPacketMessage += string.Join(" ", context?.Packet?.Data ?? ArraySegment<byte>.Empty) + "\n";
+            {
+                Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    var usbPacket = context.Packet as UsbPacket;
+                    PacketsBuffer.Add(new UsbPacketModel
+                    {
+                        Id = context?.Packet?.Id ?? -1,
+                        Action = usbPacket?.DeviceAction ?? DeviceAction.Undefined,
+                        Bytes = context?.Packet?.Data ?? Array.Empty<byte>()
+                    });
+
+                    if (PacketsBuffer.Count >= 50)
+                    {
+                        foreach (var packet in PacketsBuffer)
+                            Packets?.Add(packet);
+                        PacketsBuffer.RemoveAll(x => true);
+                    }
+                });
+            }
         };
 
         #endregion
@@ -97,18 +126,11 @@ public class SnifferViewModel : ViewModelsBase
 
     public ObservableCollection<UsbPcapDeviceId> Devices { get; }
     public ObservableCollection<UsbPcapFilter> Filters { get; }
+    public ObservableCollection<UsbPacketModel> Packets { get; }
+    public List<UsbPacketModel> PacketsBuffer { get; }
 
     #endregion
     
-    public string? ReadPacketMessage
-    {
-        get => _readPacketMessage;
-        set
-        {
-            SetProperty(nameof(ReadPacketMessage));
-            _readPacketMessage = value;
-        }
-    }
     public string? Interactivity
     {
         get => _interactivity;

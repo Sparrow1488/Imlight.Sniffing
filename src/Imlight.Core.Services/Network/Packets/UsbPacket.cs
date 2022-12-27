@@ -1,4 +1,6 @@
-﻿namespace Imlight.Core.Services.Network.Packets;
+﻿using Imlight.Core.Services.Constants;
+
+namespace Imlight.Core.Services.Network.Packets;
 
 public class UsbPacket : Packet
 {
@@ -6,4 +8,6 @@ public class UsbPacket : Packet
     : base(sender, data)
     {
     }
+    
+    public DeviceAction DeviceAction { get; set; }
 }

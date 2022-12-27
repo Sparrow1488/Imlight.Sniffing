@@ -2,7 +2,7 @@
 
 namespace Imlight.Client.Desktop.Models;
 
-public class UsbPcapFilter : INotifyPropertyChanged
+public sealed class UsbPcapFilter : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
     private bool _isSelected;
@@ -18,6 +18,6 @@ public class UsbPcapFilter : INotifyPropertyChanged
     }
     public string Name { get; set; } = string.Empty;
 
-    protected virtual void OnPropertyChanged(string? propertyName = null) =>
+    private void OnPropertyChanged(string? propertyName = null) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }

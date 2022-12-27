@@ -26,7 +26,7 @@ public class SharedPacketHandler : PacketHandler
         
         if (packet is not UsbPacket usbPacket) return;
         
-        var action = _parser.GetAction(usbPacket);
-        Logger.LogInformation("Device action is '{action}'", action);
+        usbPacket.DeviceAction = _parser.GetAction(usbPacket);
+        Logger.LogInformation("Device action is '{action}'", usbPacket.DeviceAction);
     }
 }
