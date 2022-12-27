@@ -23,7 +23,7 @@ var host = Host.CreateDefaultBuilder()
         services.Configure<UsbSnifferConfig>(opt =>
         {
             // TODO: as model
-            opt.Filter = USBPcapClient.find_usbpcap_filters()[0];
+            opt.Filter = USBPcapClient.find_usbpcap_filters()[1];
             opt.DeviceIdFilter = 2;
         });
         

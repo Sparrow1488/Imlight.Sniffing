@@ -1,11 +1,13 @@
-﻿using System.Windows;
+﻿using Imlight.Client.Desktop.ViewModels;
+using System.Windows;
 
 namespace Imlight.Client.Desktop.Windows;
 
 public partial class MainWindow : Window
 {
-    public MainWindow()
+    public MainWindow(MainViewModel viewModel)
     {
         InitializeComponent();
+        DataContext = viewModel;
     }
 }

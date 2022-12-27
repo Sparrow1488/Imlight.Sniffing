@@ -12,4 +12,8 @@
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.2-mauipre.1.22102.15" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Imlight.Core.Services\Imlight.Core.Services.csproj" />
+    </ItemGroup>
+
 </Project>
