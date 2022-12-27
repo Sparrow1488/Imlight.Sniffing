@@ -6,8 +6,16 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock FontSize="28">Sniffer view</TextBlock>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+            <TextBlock FontSize="28">Sniffer</TextBlock>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MaxHeight="350">
+            <TextBox MaxHeight="250" IsReadOnly="True" Text="{Binding ReadPacketMessage}"/>
+            
+            <WrapPanel>
+                <Button Content="Start" Width="60" Height="20" Command="{Binding StartSniffingCommand}"></Button>
+                <Button Content="Stop" Width="60" Height="20" Command="{Binding StopSniffingCommand}"></Button>
+            </WrapPanel>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -6,7 +6,7 @@
         xmlns:viewmodels="clr-namespace:Imlight.Client.Desktop.ViewModels"
         xmlns:views="clr-namespace:Imlight.Client.Desktop.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" MinWidth="450" MinHeight="550">
     <ContentControl Content="{Binding CurrentViewModel}">
         <ContentControl.Resources>
             <DataTemplate DataType="{x:Type viewmodels:SnifferViewModel}">

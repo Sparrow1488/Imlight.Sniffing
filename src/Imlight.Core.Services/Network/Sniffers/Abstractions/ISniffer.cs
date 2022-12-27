@@ -2,5 +2,7 @@
 
 public interface ISniffer : IDisposable
 {
+    bool IsStarted();
     void StartCaptureAsync();
+    void StopCapture();
 }

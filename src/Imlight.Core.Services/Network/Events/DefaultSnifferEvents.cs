@@ -1,6 +1,5 @@
 ﻿using Imlight.Core.Services.Handlers;
 using Imlight.Core.Services.Network.Packets;
-using Imlight.Core.Services.Parsers;
 using Microsoft.Extensions.Logging;
 
 namespace Imlight.Core.Services.Network.Events;

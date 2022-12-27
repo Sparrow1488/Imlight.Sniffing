@@ -11,8 +11,4 @@
       <PackageReference Include="USBPcapLib" Version="1.0.3" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Network" />
-    </ItemGroup>
-
 </Project>

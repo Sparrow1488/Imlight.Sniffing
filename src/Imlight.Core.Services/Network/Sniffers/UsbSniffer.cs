@@ -13,23 +13,30 @@ namespace Imlight.Core.Services.Network.Sniffers;
 
 public sealed class UsbSniffer : IUsbSniffer
 {
-    private readonly USBPcapClient _client;
+    private readonly IOptions<UsbSnifferConfig> _options;
+
+    private bool _isStarted;
+    private USBPcapClient? _client;
+    private CancellationTokenSource? _captureTaskSource;
 
     public UsbSniffer(IOptions<UsbSnifferConfig> options)
     {
+        _options = options;
         if (!WindowsHelper.IsAdministrator())
         {
             throw new ForbiddenException("You must run this process as Administrator");
         }
-        
-        _client = new USBPcapClient(options.Value.Filter, options.Value.DeviceIdFilter);
     }
     
     public UsbSnifferEvents? Events { get; set; }
-    
+
+    public bool IsStarted() => _isStarted;
+
     public void StartCaptureAsync()
     {
-        _client.DataRead += (sender, eventArgs) =>
+        InitUsbPcapClient(_options);
+
+        _client!.DataRead += (sender, eventArgs) =>
         {
             if (eventArgs is null) return;
             
@@ -37,15 +44,36 @@ public sealed class UsbSniffer : IUsbSniffer
             Events?.OnReadPacket(packet);
         };
 
+        _captureTaskSource = new CancellationTokenSource();
+        var captureTaskToken = _captureTaskSource.Token;
+        
         Task.Run(() =>
         {
             _client.start_capture();
+            _isStarted = true;
             _client.wait_for_exit_signal();
-        });
+        }, captureTaskToken);
+    }
+
+    private void InitUsbPcapClient(IOptions<UsbSnifferConfig> options)
+    {
+        _client = new USBPcapClient(options.Value.Filter, options.Value.DeviceIdFilter);
+    }
+
+    public void StopCapture()
+    {
+        _captureTaskSource?.Cancel();
+        _isStarted = false;
+        _client?.Dispose();
     }
 
     public void Dispose()
     {
-        _client.Dispose();
+        try
+        {
+            StopCapture();
+            _client?.Dispose();
+        }
+        catch { /*ignored*/ }
     }
 }

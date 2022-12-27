@@ -8,6 +8,6 @@ public abstract class Packet
         Data = data;
     }
     
-    public object Sender { get; protected set; } = new();
-    public byte[] Data { get; protected set; } = Array.Empty<byte>();
+    public object Sender { get; }
+    public byte[] Data { get; }
 }
