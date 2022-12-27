@@ -6,16 +6,74 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
-            <TextBlock FontSize="28">Sniffer</TextBlock>
-        </StackPanel>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MaxHeight="350">
-            <TextBox MaxHeight="250" IsReadOnly="True" Text="{Binding ReadPacketMessage}"/>
+        <StackPanel>
+            <StackPanel x:Name="Settings">
+                <GroupBox>
+                    <GroupBox.Header>
+                        <TextBlock Text="Settings" FontFamily="Times New Roman"/>
+                    </GroupBox.Header>
+                    
+                    <GroupBox.Content>
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                    
+                            <StackPanel>
+                                <StackPanel x:Name="UsbInterfaces">
+                                    <ListView BorderThickness="0" 
+                                              BorderBrush="Transparent" 
+                                              SelectionMode="Single" 
+                                              ItemsSource="{Binding Filters}">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <RadioButton GroupName="Inter" 
+                                                             IsChecked="{Binding Path=IsSelected}" 
+                                                             Content="{Binding Path=Name}"/>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </StackPanel>
+                            
+                                <StackPanel x:Name="UsbDeviceId" Margin="0 0 20 0">
+                                    <WrapPanel>
+                                        <TextBlock VerticalAlignment="Center" Text="DeviceId"></TextBlock>
+                                        <ComboBox Margin="2" 
+                                                  ItemsSource="{Binding Devices}" 
+                                                  IsSelected="{Binding Path=IsSelected}"/>
+                                    </WrapPanel>
+                                </StackPanel>    
+                            </StackPanel>
+                            
+                            <TextBox Grid.Row="0" Grid.Column="1" 
+                                     Text="{Binding Interactivity}" 
+                                     MaxHeight="200" 
+                                     VerticalScrollBarVisibility="Visible" 
+                                     IsReadOnly="True"/>
+                            
+                            <!-- <StackPanel Grid.Row="1" Grid.Column="0"> -->
+                            <!--     <Button Margin="0 5" Command="{Binding ApplySettingsCommand}"> -->
+                            <!--         <TextBlock Text="Apply" FontFamily="Times New Roman"/> -->
+                            <!--     </Button> -->
+                            <!-- </StackPanel> -->
+                        </Grid>
+                    </GroupBox.Content>
+                </GroupBox>
+            </StackPanel>
             
-            <WrapPanel>
-                <Button Content="Start" Width="60" Height="20" Command="{Binding StartSniffingCommand}"></Button>
-                <Button Content="Stop" Width="60" Height="20" Command="{Binding StopSniffingCommand}"></Button>
-            </WrapPanel>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MaxHeight="350">
+                <TextBox MaxHeight="250" IsReadOnly="True" Text="{Binding ReadPacketMessage}"/>
+            
+                <WrapPanel>
+                    <Button Content="Start" Width="60" Height="20" Command="{Binding StartSniffingCommand}"></Button>
+                    <Button Content="Stop" Width="60" Height="20" Command="{Binding StopSniffingCommand}"></Button>
+                </WrapPanel>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>

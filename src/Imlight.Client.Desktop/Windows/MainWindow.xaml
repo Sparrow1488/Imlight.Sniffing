@@ -6,12 +6,24 @@
         xmlns:viewmodels="clr-namespace:Imlight.Client.Desktop.ViewModels"
         xmlns:views="clr-namespace:Imlight.Client.Desktop.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" MinWidth="450" MinHeight="550">
-    <ContentControl Content="{Binding CurrentViewModel}">
-        <ContentControl.Resources>
-            <DataTemplate DataType="{x:Type viewmodels:SnifferViewModel}">
-                <views:SnifferView/>
-            </DataTemplate>
-        </ContentControl.Resources>
-    </ContentControl>
+        Title="MainWindow" 
+        Height="500" Width="450" 
+        MinWidth="450" MinHeight="500"
+        MaxWidth="650">
+    <Grid>
+        <StackPanel>
+            <StackPanel VerticalAlignment="Top" Height="80">
+                <TextBlock FontFamily="Times New Roman" Text="Imlight.Sniffer" FontSize="45" Margin="10 20"/>
+            </StackPanel>
+            <StackPanel>
+                <ContentControl Content="{Binding CurrentViewModel}">
+                    <ContentControl.Resources>
+                        <DataTemplate DataType="{x:Type viewmodels:SnifferViewModel}">
+                            <views:SnifferView/>
+                        </DataTemplate>
+                    </ContentControl.Resources>
+                </ContentControl>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
 </Window>

@@ -18,17 +18,21 @@ public static class UsbPcapHelper
             var model = new UsbPcapModel();
 
             var interactiveInfo = USBPcapClient.enumerate_print_usbpcap_interactive(filter);
-            foreach (var line in interactiveInfo.Split("\n"))
+            var interactiveInfoLines = interactiveInfo.Split("\n");
+            for (var i = 0; i < interactiveInfoLines.Length; i++)
             {
+                var line = interactiveInfoLines[i];
+
                 var interactive = new UsbPcapInteractive();
-                
+
                 var fixedLine = line.Trim();
 
-                if (fixedLine.StartsWith(@"\??\"))
+                if (i == 0)
                 {
                     model.Path = fixedLine;
+                    continue;
                 }
-                
+
                 if (fixedLine.StartsWith("[Port"))
                 {
                     var portChars = fixedLine.SkipWhile(x => !char.IsDigit(x)).TakeWhile(char.IsDigit);
@@ -36,17 +40,17 @@ public static class UsbPcapHelper
                     interactive.DevicePort = int.Parse(portString);
 
                     fixedLine = string.Join("", fixedLine.SkipWhile(x => x != '(')).Trim();
-                    var deviceIdString = string.Join("", fixedLine.SkipWhile(x => !char.IsDigit(x)).TakeWhile(char.IsDigit));
+                    var deviceIdString = string.Join("",
+                        fixedLine.SkipWhile(x => !char.IsDigit(x)).TakeWhile(char.IsDigit));
                     interactive.DeviceId = int.Parse(deviceIdString);
                 }
-                
+
                 interactiveList.Add(interactive);
             }
 
             model.Interactives = interactiveList;
             modelsList.Add(model);
         }
-
         return modelsList;
     }
 }
