@@ -4,12 +4,15 @@ using Imlight.Core.Services.Network.Sniffers;
 using Imlight.Core.Services.Network.Sniffers.Abstractions;
 using Imlight.Core.Services.Network.Sniffers.Options;
 using Imlight.Core.Services.Parsers;
+using Imlight.Core.Services.Utility;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using USBPcapLib;
 
 const string ENVIRONMENT_NAME = "Imlight.Client.Desktop";
+
+var models = UsbPcapHelper.GetAvailableModels();
 
 var host = Host.CreateDefaultBuilder()
     .ConfigureServices(services =>
@@ -24,6 +27,7 @@ var host = Host.CreateDefaultBuilder()
         {
             // TODO: as model
             opt.Filter = USBPcapClient.find_usbpcap_filters()[1];
+            var all = USBPcapClient.enumerate_print_usbpcap_interactive(opt.Filter);
             opt.DeviceIdFilter = 2;
         });
         
