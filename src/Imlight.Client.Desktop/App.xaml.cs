@@ -32,7 +32,6 @@ public partial class App : Application
                 
                 services.AddSingleton<StartSniffingCommand>();
                 services.AddSingleton<StopSniffingCommand>();
-                services.AddSingleton<ApplySnifferSettingsCommand>();
 
                 #region UsbPcap services
 
