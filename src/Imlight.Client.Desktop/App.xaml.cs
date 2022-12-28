@@ -1,7 +1,5 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using Imlight.Client.Desktop.Commands;
-using Imlight.Client.Desktop.Sniffing.Events;
 using Imlight.Client.Desktop.ViewModels;
 using Imlight.Client.Desktop.Windows;
 using Imlight.Core.Services.Handlers;

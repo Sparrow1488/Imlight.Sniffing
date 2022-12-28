@@ -1,4 +1,5 @@
 ﻿using Imlight.Core.Services.Handlers;
+using Imlight.Core.Services.Network.Contexts;
 using Imlight.Core.Services.Network.Events;
 using Imlight.Core.Services.Network.Sniffers;
 using Imlight.Core.Services.Network.Sniffers.Abstractions;
@@ -17,6 +18,7 @@ var models = UsbPcapHelper.GetAvailableModels();
 var host = Host.CreateDefaultBuilder()
     .ConfigureServices(services =>
     {
+        services.AddSingleton<SnifferContext>();
         services.AddSingleton<IUsbSniffer, UsbSniffer>();
         services.AddSingleton<UsbSnifferEvents, DefaultSnifferEvents>();
         services.AddLogging(builder => 
@@ -26,7 +28,7 @@ var host = Host.CreateDefaultBuilder()
         services.Configure<UsbSnifferConfig>(opt =>
         {
             // TODO: as model
-            opt.Filter = USBPcapClient.find_usbpcap_filters()[1];
+            opt.Filter = USBPcapClient.find_usbpcap_filters()[0];
             var all = USBPcapClient.enumerate_print_usbpcap_interactive(opt.Filter);
             opt.DeviceIdFilter = 2;
         });
