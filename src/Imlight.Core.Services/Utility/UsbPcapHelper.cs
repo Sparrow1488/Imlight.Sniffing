@@ -19,6 +19,9 @@ public static class UsbPcapHelper
 
             var interactiveInfo = USBPcapClient.enumerate_print_usbpcap_interactive(filter);
             var interactiveInfoLines = interactiveInfo.Split("\n");
+
+            var currentPort = 0;
+            var currentDeviceId = 0;
             for (var i = 0; i < interactiveInfoLines.Length; i++)
             {
                 var line = interactiveInfoLines[i];
@@ -27,30 +30,67 @@ public static class UsbPcapHelper
 
                 var fixedLine = line.Trim();
 
+                #region Path detect
+
                 if (i == 0)
                 {
                     model.Path = fixedLine;
                     continue;
                 }
 
+                #endregion
+
+                #region Port & DeviceId detect
+
                 if (fixedLine.StartsWith("[Port"))
                 {
                     var portChars = fixedLine.SkipWhile(x => !char.IsDigit(x)).TakeWhile(char.IsDigit);
                     var portString = string.Join(string.Empty, portChars);
-                    interactive.DevicePort = int.Parse(portString);
+                    currentPort = int.Parse(portString);
 
                     fixedLine = string.Join("", fixedLine.SkipWhile(x => x != '(')).Trim();
                     var deviceIdString = string.Join("",
                         fixedLine.SkipWhile(x => !char.IsDigit(x)).TakeWhile(char.IsDigit));
-                    interactive.DeviceId = int.Parse(deviceIdString);
+                    currentDeviceId = int.Parse(deviceIdString);
                 }
 
+                #endregion
+
+                var devices = new Dictionary<string, List<string>>();
+                // Group of devices
+                if (line.StartsWith("      ") && char.IsLetterOrDigit(line[7]))
+                {
+                    var devicesNames = interactiveInfoLines
+                    .Skip(i)
+                    .SkipWhile(x => x != line).Skip(1)
+                    .TakeWhile(x => x.StartsWith("        "))
+                    .Select(x => x.Trim());
+                    
+                    var fixedDevicesGroup = line.Trim();
+                    
+                    if (!devices.ContainsKey(fixedDevicesGroup))
+                        devices.Add(fixedDevicesGroup, devicesNames.ToList());
+                    else
+                    {
+                        var keys = devices.Keys.Where(x => x.StartsWith(fixedDevicesGroup));
+                        var indexedDeviceGroup = fixedDevicesGroup + $" ({keys.Count() + 1})";
+                        devices.Add(indexedDeviceGroup, devicesNames.ToList());
+                    }
+                }
+
+                interactive.DeviceId = currentDeviceId;
+                interactive.DevicePort = currentPort;
+                interactive.Devices = devices;
                 interactiveList.Add(interactive);
             }
 
-            model.Interactives = interactiveList;
+            model.Filter = filter;
+            model.Interactives = interactiveList.Where(x => x.Devices.Any()).ToList();
+            interactiveList.ForEach(x => x.ParentModel = model);
+            
             modelsList.Add(model);
         }
+
         return modelsList;
     }
 }
